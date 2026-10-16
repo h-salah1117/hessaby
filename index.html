@@ -1,0 +1,1698 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hessaby Account Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary-color: #1e40af;
+      --primary-light: #2563eb;
+      --secondary-color: #4b5563;
+      --success-color: #047857;
+      --danger-color: #dc2626;
+      --warning-color: #d97706;
+      --light-bg: #ffffff;
+      --card-bg: #ffffff;
+      --border-color: #d1d5db;
+      --text-color: #111827;
+      --text-light: #4b5563;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+      --transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] {
+      --primary-color: #60a5fa;
+      --primary-light: #93c5fd;
+      --secondary-color: #cbd5e1;
+      --success-color: #34d399;
+      --danger-color: #f87171;
+      --warning-color: #fbbf24;
+      --light-bg: #0f172a;
+      --card-bg: #1e293b;
+      --border-color: #475569;
+      --text-color: #f1f5f9;
+      --text-light: #cbd5e1;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="dark"] .navbar {
+      background: linear-gradient(135deg, #1e3a8a, #60a5fa);
+    }
+
+    [data-theme="dark"] .stat-card {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] .stat-card:hover {
+      background: linear-gradient(135deg, #334155, #1e293b);
+      border-color: #60a5fa;
+    }
+
+    [data-theme="dark"] .form-container,
+    [data-theme="dark"] .login-container {
+      background-color: #1e293b;
+      border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] table {
+      background-color: #1e293b;
+      border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] table th {
+      background: linear-gradient(135deg, #1e3a8a, #60a5fa);
+    }
+
+    [data-theme="dark"] table tr:nth-child(even) {
+      background-color: #334155;
+    }
+
+    [data-theme="dark"] table tr:hover {
+      background-color: #475569;
+      border-color: #60a5fa;
+    }
+
+    [data-theme="dark"] .subscription-option {
+      background-color: #1e293b;
+      border-color: var(--border-color);
+    }
+
+    [data-theme="dark"] .subscription-option:hover {
+      background-color: #334155;
+      border-color: #60a5fa;
+    }
+
+    [data-theme="dark"] .loading {
+      background-color: rgba(15, 23, 42, 0.95);
+    }
+
+    [data-theme="dark"] .spinner {
+      border-color: #334155;
+      border-top-color: #60a5fa;
+    }
+
+    [data-theme="dark"] .form-group input,
+    [data-theme="dark"] .form-group select,
+    [data-theme="dark"] .form-group textarea {
+      background-color: #334155;
+      border-color: var(--border-color);
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] .form-group input:focus,
+    [data-theme="dark"] .form-group select:focus,
+    [data-theme="dark"] .form-group textarea:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+    }
+
+    [data-theme="dark"] .button {
+      background: linear-gradient(135deg, #1e3a8a, #60a5fa);
+    }
+
+    [data-theme="dark"] .button:hover {
+      background: linear-gradient(135deg, #60a5fa, #1e3a8a);
+    }
+
+    [data-theme="dark"] .button.secondary {
+      background: linear-gradient(135deg, #475569, #94a3b8);
+    }
+
+    [data-theme="dark"] .button.secondary:hover {
+      background: linear-gradient(135deg, #94a3b8, #475569);
+    }
+
+    [data-theme="dark"] footer {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: #e0f2fe;
+    }
+
+    [data-theme="dark"] .activity-icon.deposit {
+      background: #34d399;
+    }
+
+    [data-theme="dark"] .activity-icon.withdrawal {
+      background: #f87171;
+    }
+
+    [data-theme="dark"] .activity-icon.transfer {
+      background: #60a5fa;
+    }
+
+    [data-theme="dark"] .chart-filter.active {
+      background: #60a5fa;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    [data-theme="dark"] .quick-action-btn {
+      background-color: #1e293b;
+      border-color: var(--border-color);
+    }
+
+    [data-theme="dark"] .quick-action-btn:hover {
+      background-color: #334155;
+      border-color: #60a5fa;
+    }
+
+    [data-theme="dark"] .quick-action-btn i {
+      color: #60a5fa;
+    }
+
+    [data-theme="dark"] .recent-activity {
+      background-color: #1e293b;
+      border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] .activity-header {
+      border-bottom-color: var(--border-color);
+    }
+
+    [data-theme="dark"] .activity-item {
+      border-bottom-color: var(--border-color);
+    }
+
+    [data-theme="dark"] .activity-item:hover {
+      background-color: #334155;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: var(--transition);
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .navbar a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background-color: var(--warning-color);
+      transition: var(--transition);
+      transform: translateX(-50%);
+    }
+
+    .navbar a:hover::after,
+    .navbar a.active::after {
+      width: 80%;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      transition: var(--transition);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(180deg);
+    }
+
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: var(--transition);
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--border-color);
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background-color: var(--light-bg);
+      color: var(--text-color);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0.5rem 0.5rem 0 0;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .button:hover::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: var(--primary-color);
+    }
+
+    p {
+      font-size: 1rem;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+    }
+
+    .button.secondary {
+      background: linear-gradient(135deg, var(--secondary-color), #94a3b8);
+    }
+
+    .button.secondary:hover {
+      background: linear-gradient(135deg, #94a3b8, var(--secondary-color));
+    }
+
+    .button i {
+      margin-right: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 0;
+      background-color: var(--card-bg);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+    }
+
+    table th,
+    table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    table th {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+    }
+
+    table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table tr:nth-child(even) {
+      background-color: var(--light-bg);
+    }
+
+    table tr:hover {
+      background-color: rgba(0, 51, 102, 0.05);
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .account-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .form-group select,
+    .form-group input,
+    .form-group textarea {
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-group select:focus,
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+    }
+
+    .subscription-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .subscription-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: var(--transition);
+      background-color: var(--card-bg);
+    }
+
+    .subscription-option:hover {
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .subscription-option input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-color);
+    }
+
+    .subscription-option label {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .subscription-option .price {
+      display: block;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin: 0.25rem 0;
+      font-size: 1.1rem;
+    }
+
+    .subscription-option .description {
+      margin: 0.25rem 0 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .button-group .button {
+      flex: 1;
+      margin: 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, var(--card-bg), var(--light-bg));
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stat-card p {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    .stat-card .trend {
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .trend.positive {
+      color: var(--success-color);
+      font-weight: 500;
+    }
+
+    .trend.negative {
+      color: var(--danger-color);
+      font-weight: 500;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .quick-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      color: var(--text-color);
+    }
+
+    .quick-action-btn:hover {
+      background: var(--light-bg);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .quick-action-btn i {
+      font-size: 1.25rem;
+      color: var(--primary-color);
+    }
+
+    .recent-activity {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+      margin: 2rem 0;
+      overflow: hidden;
+    }
+
+    .activity-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .activity-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .activity-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition);
+    }
+
+    .activity-item:hover {
+      background: var(--light-bg);
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: white;
+    }
+
+    .activity-icon.deposit {
+      background: var(--success-color);
+    }
+
+    .activity-icon.withdrawal {
+      background: var(--danger-color);
+    }
+
+    .activity-icon.transfer {
+      background: var(--primary-color);
+    }
+
+    .activity-details {
+      flex: 1;
+    }
+
+    .activity-title {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .activity-time {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .activity-amount {
+      font-weight: 600;
+    }
+
+    .amount-positive {
+      color: var(--success-color);
+    }
+
+    .amount-negative {
+      color: var(--danger-color);
+    }
+
+    .chart-container {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-filters {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .chart-filter {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .chart-filter.active {
+      background: var(--primary-color);
+      color: white;
+      font-weight: 500;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: #e0f2fe;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+
+    .footer-section h3 {
+      color: #ffffff;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .footer-section p {
+      color: #e0f2fe;
+      margin-bottom: 0.5rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: var(--transition);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .social-links a.facebook {
+      background: #1877f2;
+    }
+
+    .social-links a.twitter {
+      background: #1da1f2;
+    }
+
+    .social-links a.linkedin {
+      background: #0a66c2;
+    }
+
+    .social-links a.instagram {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    }
+
+    .social-links a:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .contact-info a {
+      color: #e0f2fe;
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .contact-info a:hover {
+      color: #ffffff;
+    }
+
+    .footer-bottom {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+      }
+
+      .navbar ul {
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      table {
+        min-width: 600px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <nav class="navbar">
+    <h1>Hessaby</h1>
+    <ul>
+      <li><a href="#dashboard" class="active">Dashboard</a></li>
+      <li><a href="#accounts">Accounts</a></li>
+      <li><a href="#transactions">Transactions</a></li>
+      <li><a href="#subscriptions">Subscriptions</a></li>
+      <li><a href="#admin">Admin</a></li>
+    </ul>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+      <i class="fas fa-moon"></i>
+    </button>
+  </nav>
+
+  <main id="app">
+    <!-- Dynamic content will be loaded here -->
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About Hessaby</h3>
+        <p>Your trusted banking partner for secure and convenient financial services. We're committed to providing the
+          best banking experience for our customers.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <div class="contact-info">
+          <a href="tel:+201234567890">📞 +20 123 456 7890</a>
+          <a href="mailto:support@hessaby.com">✉️ support@hessaby.com</a>
+          <a href="#">📍 123 Banking Street, Cairo, Egypt</a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="#" class="facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2025 Hessaby. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    const routes = {
+      '#dashboard': `
+        <h2>Dashboard</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3><i class="fas fa-wallet"></i> Total Balance</h3>
+                <p>$12,450.00</p>
+                <div class="trend positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+2.5% from last month</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-credit-card"></i> Active Accounts</h3>
+                <p>3</p>
+                <div class="trend positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+1 new account</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-exchange-alt"></i> Pending Transactions</h3>
+                <p>1</p>
+                <div class="trend negative">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>-1 from yesterday</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-chart-line"></i> Monthly Savings</h3>
+                <p>$850.00</p>
+                <div class="trend positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+15% from last month</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <a href="#new-transaction" class="quick-action-btn">
+                <i class="fas fa-plus-circle"></i>
+                <span>New Transaction</span>
+            </a>
+            <a href="#create-account" class="quick-action-btn">
+                <i class="fas fa-university"></i>
+                <span>Open New Account</span>
+            </a>
+            <a href="#" class="quick-action-btn">
+                <i class="fas fa-file-invoice"></i>
+                <span>Download Statement</span>
+            </a>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Account Balance Trend</h3>
+                <div class="chart-filters">
+                    <span class="chart-filter active" data-period="week">Week</span>
+                    <span class="chart-filter" data-period="month">Month</span>
+                    <span class="chart-filter" data-period="year">Year</span>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="balanceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="recent-activity">
+            <div class="activity-header">
+                <h3>Recent Activity</h3>
+                <a href="#transactions" class="button secondary">View All</a>
+            </div>
+            <ul class="activity-list">
+                <li class="activity-item">
+                    <div class="activity-icon deposit">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-title">Salary Deposit</div>
+                        <div class="activity-time">Today, 09:30 AM</div>
+                    </div>
+                    <div class="activity-amount amount-positive">+$3,000.00</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon withdrawal">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-title">Utility Payment</div>
+                        <div class="activity-time">Yesterday, 02:15 PM</div>
+                    </div>
+                    <div class="activity-amount amount-negative">-$120.00</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon transfer">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-title">Transfer to Savings</div>
+                        <div class="activity-time">Yesterday, 10:45 AM</div>
+                    </div>
+                    <div class="activity-amount amount-negative">-$500.00</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon deposit">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-title">Investment Return</div>
+                        <div class="activity-time">2 days ago, 03:20 PM</div>
+                    </div>
+                    <div class="activity-amount amount-positive">+$250.00</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon withdrawal">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-title">Online Shopping</div>
+                        <div class="activity-time">3 days ago, 11:15 AM</div>
+                    </div>
+                    <div class="activity-amount amount-negative">-$85.50</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon deposit">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-title">Freelance Payment</div>
+                        <div class="activity-time">4 days ago, 09:45 AM</div>
+                    </div>
+                    <div class="activity-amount amount-positive">+$750.00</div>
+                </li>
+            </ul>
+        </div>
+
+      `,
+      '#accounts': `
+        <h2>Account Management</h2>
+        <p>Manage your bank accounts below. Select an action to proceed.</p>
+        <button class="button" onclick="window.location.hash = '#create-account'">Create Account</button>
+        <button class="button" onclick="window.location.hash = '#update-account'">Update Account</button>
+        <button class="button secondary" onclick="alert('Close Account is not available yet.')">Close Account</button>
+        <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Account Number</th><th>Type</th><th>Balance</th><th>Status</th><th>Bank</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>123456789</td><td>Checking</td><td>$1,200</td><td>Active</td><td>National Bank</td></tr>
+            <tr><td>987654321</td><td>Savings</td><td>$8,450</td><td>Active</td><td>Misr Bank</td></tr>
+            <tr><td>456789123</td><td>Investment</td><td>$2,800</td><td>Active</td><td>Alexandria Bank</td></tr>
+          </tbody>
+        </table>
+        </div>
+      `,
+      '#transactions': `
+        <h2>Transactions</h2>
+        <p>Monitor and manage your deposits, withdrawals, and transfers here.</p>
+        <button class="button" onclick="window.location.hash = '#new-transaction'">New Transaction</button>
+        <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Date</th><th>Type</th><th>Amount</th><th>Status</th><th>Bank</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>TX1001</td><td>2025-05-01</td><td>Salary Deposit</td><td>+$3,000.00</td><td>Completed</td><td>National Bank</td></tr>
+            <tr><td>TX1002</td><td>2025-05-02</td><td>Utility Payment</td><td>-$120.00</td><td>Completed</td><td>Misr Bank</td></tr>
+            <tr><td>TX1003</td><td>2025-05-03</td><td>Transfer to Savings</td><td>-$500.00</td><td>Completed</td><td>Alexandria Bank</td></tr>
+            <tr><td>TX1004</td><td>2025-05-04</td><td>Investment Return</td><td>+$250.00</td><td>Completed</td><td>National Bank</td></tr>
+            <tr><td>TX1005</td><td>2025-05-05</td><td>Online Shopping</td><td>-$85.50</td><td>Completed</td><td>Misr Bank</td></tr>
+            <tr><td>TX1006</td><td>2025-05-06</td><td>Freelance Payment</td><td>+$750.00</td><td>Completed</td><td>Alexandria Bank</td></tr>
+            <tr><td>TX1007</td><td>2025-05-07</td><td>Transfer</td><td>-$500.00</td><td>Pending</td><td>National Bank</td></tr>
+          </tbody>
+        </table>
+        </div>
+      `,
+      '#subscriptions': `
+        <h2>Subscriptions</h2>
+        <p>Manage your subscribed services such as SMS alerts and premium banking features.</p>
+        <button class="button" onclick="window.location.hash = '#manage-subscriptions'">Manage Subscriptions</button>
+        <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Service</th><th>Status</th><th>Renewal Date</th><th>Price</th><th>Bank</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>SMS Alerts</td><td>Active</td><td>2025-06-01</td><td>$5/month</td><td>National Bank</td></tr>
+            <tr><td>Premium Support</td><td>Inactive</td><td>-</td><td>$15/month</td><td>Misr Bank</td></tr>
+            <tr><td>Investment Advisory</td><td>Active</td><td>2025-07-01</td><td>$25/month</td><td>Alexandria Bank</td></tr>
+          </tbody>
+        </table>
+        </div>
+      `,
+      '#manage-subscriptions': `
+        <h2>Manage Subscriptions</h2>
+        <div class="form-container">
+            <form id="subscriptionForm" class="account-form">
+                <div class="form-group">
+                    <label for="subscriptionAccount">Select Account</label>
+                    <select id="subscriptionAccount" name="account" required>
+                        <option value="">Select an account</option>
+                        <option value="123456789">Checking Account - National Bank (123456789)</option>
+                        <option value="987654321">Savings Account - Misr Bank (987654321)</option>
+                        <option value="456789123">Investment Account - Alexandria Bank (456789123)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Available Services</label>
+                    <div class="subscription-options">
+                        <div class="subscription-option">
+                            <input type="checkbox" id="smsAlerts" name="services" value="sms">
+                            <label for="smsAlerts">
+                                <strong>SMS Alerts</strong>
+                                <span class="price">$5/month</span>
+                                <p class="description">Receive instant notifications for all account activities</p>
+                            </label>
+                        </div>
+                        <div class="subscription-option">
+                            <input type="checkbox" id="premiumSupport" name="services" value="premium">
+                            <label for="premiumSupport">
+                                <strong>Premium Support</strong>
+                                <span class="price">$15/month</span>
+                                <p class="description">24/7 priority customer support and dedicated account manager</p>
+                            </label>
+                        </div>
+                        <div class="subscription-option">
+                            <input type="checkbox" id="investmentAdvisory" name="services" value="investment">
+                            <label for="investmentAdvisory">
+                                <strong>Investment Advisory</strong>
+                                <span class="price">$25/month</span>
+                                <p class="description">Professional investment advice and market analysis</p>
+                            </label>
+                        </div>
+                        <div class="subscription-option">
+                            <input type="checkbox" id="creditMonitoring" name="services" value="credit">
+                            <label for="creditMonitoring">
+                                <strong>Credit Monitoring</strong>
+                                <span class="price">$10/month</span>
+                                <p class="description">Real-time credit score monitoring and alerts</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="billingCycle">Billing Cycle</label>
+                    <select id="billingCycle" name="billingCycle" required>
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="yearly">Yearly (Save 20%)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="autoRenew">Auto-Renew</label>
+                    <select id="autoRenew" name="autoRenew" required>
+                        <option value="enabled">Enabled</option>
+                        <option value="disabled">Disabled</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="button">Update Subscriptions</button>
+                    <button type="button" class="button secondary" onclick="window.location.hash = '#subscriptions'">Cancel</button>
+                </div>
+            </form>
+        </div>
+      `,
+      '#admin': `
+        <h2>Admin Panel</h2>
+        <p>Access administrative tools, user roles, and configuration settings.</p>
+        <button class="button">Settings</button>
+        <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>User</th><th>Role</th><th>Status</th><th>Last Login</th><th>Bank</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>admin1</td><td>Administrator</td><td>Active</td><td>2025-05-04</td><td>Hessaby</td></tr>
+            <tr><td>support1</td><td>Support</td><td>Inactive</td><td>2025-05-01</td><td>Hessaby</td></tr>
+            <tr><td>manager1</td><td>Manager</td><td>Active</td><td>2025-05-03</td><td>Hessaby</td></tr>
+          </tbody>
+        </table>
+        </div>
+      `,
+      '#create-account': `
+        <h2>Create New Account</h2>
+        <div class="form-container">
+            <form id="createAccountForm" class="account-form">
+                <div class="form-group">
+                    <label for="bank">Select Bank</label>
+                    <select id="bank" name="bank" required>
+                        <option value="">Select a bank</option>
+                        <option value="national">National Bank</option>
+                        <option value="misr">Misr Bank</option>
+                        <option value="alexandria">Alexandria Bank</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="accountType">Account Type</label>
+                    <select id="accountType" name="accountType" required>
+                        <option value="">Select account type</option>
+                        <option value="checking">Checking Account</option>
+                        <option value="savings">Savings Account</option>
+                        <option value="investment">Investment Account</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="initialDeposit">Initial Deposit</label>
+                    <input type="number" id="initialDeposit" name="initialDeposit" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="currency">Currency</label>
+                    <select id="currency" name="currency" required>
+                        <option value="EGP">Egyptian Pound (EGP)</option>
+                        <option value="USD">US Dollar (USD)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cardType">Card Type</label>
+                    <select id="cardType" name="cardType" required>
+                        <option value="">Select card type</option>
+                        <option value="debit">Debit Card</option>
+                        <option value="credit">Credit Card</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="button">Create Account</button>
+                    <button type="button" class="button secondary" onclick="window.location.hash = '#accounts'">Cancel</button>
+                </div>
+            </form>
+        </div>
+      `,
+      '#update-account': `
+        <h2>Update Account</h2>
+        <div class="form-container">
+            <form id="updateAccountForm" class="account-form">
+                <div class="form-group">
+                    <label for="selectAccount">Select Account to Update</label>
+                    <select id="selectAccount" name="selectAccount" required onchange="loadAccountDetails(this.value)">
+                        <option value="">Select an account</option>
+                        <option value="123456789">Checking Account - National Bank (123456789)</option>
+                        <option value="987654321">Savings Account - Misr Bank (987654321)</option>
+                        <option value="456789123">Investment Account - Alexandria Bank (456789123)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="updateBank">Bank</label>
+                    <select id="updateBank" name="bank" required>
+                        <option value="national">National Bank</option>
+                        <option value="misr">Misr Bank</option>
+                        <option value="alexandria">Alexandria Bank</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="updateAccountType">Account Type</label>
+                    <select id="updateAccountType" name="accountType" required>
+                        <option value="checking">Checking Account</option>
+                        <option value="savings">Savings Account</option>
+                        <option value="investment">Investment Account</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="updateCurrency">Currency</label>
+                    <select id="updateCurrency" name="currency" required>
+                        <option value="EGP">Egyptian Pound (EGP)</option>
+                        <option value="USD">US Dollar (USD)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="updateCardType">Card Type</label>
+                    <select id="updateCardType" name="cardType" required>
+                        <option value="debit">Debit Card</option>
+                        <option value="credit">Credit Card</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="updateStatus">Account Status</label>
+                    <select id="updateStatus" name="status" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="frozen">Frozen</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="button">Update Account</button>
+                    <button type="button" class="button secondary" onclick="window.location.hash = '#accounts'">Cancel</button>
+                </div>
+            </form>
+        </div>
+      `,
+      '#new-transaction': `
+        <h2>Create New Transaction</h2>
+        <div class="form-container">
+            <form id="newTransactionForm" class="account-form">
+                <div class="form-group">
+                    <label for="transactionAccount">Select Account</label>
+                    <select id="transactionAccount" name="account" required>
+                        <option value="">Select an account</option>
+                        <option value="123456789">Checking Account - National Bank (123456789)</option>
+                        <option value="987654321">Savings Account - Misr Bank (987654321)</option>
+                        <option value="456789123">Investment Account - Alexandria Bank (456789123)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transactionType">Transaction Type</label>
+                    <select id="transactionType" name="type" required>
+                        <option value="">Select transaction type</option>
+                        <option value="deposit">Deposit</option>
+                        <option value="withdrawal">Withdrawal</option>
+                        <option value="transfer">Transfer</option>
+                        <option value="payment">Payment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transactionAmount">Amount</label>
+                    <input type="number" id="transactionAmount" name="amount" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="transactionCurrency">Currency</label>
+                    <select id="transactionCurrency" name="currency" required>
+                        <option value="EGP">Egyptian Pound (EGP)</option>
+                        <option value="USD">US Dollar (USD)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transactionDate">Transaction Date</label>
+                    <input type="date" id="transactionDate" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="transactionDescription">Description</label>
+                    <textarea id="transactionDescription" name="description" rows="3" required></textarea>
+                </div>
+                <div id="transferFields" style="display: none;">
+                    <div class="form-group">
+                        <label for="transferToAccount">Transfer To Account</label>
+                        <select id="transferToAccount" name="transferTo">
+                            <option value="">Select destination account</option>
+                            <option value="123456789">Checking Account - National Bank (123456789)</option>
+                            <option value="987654321">Savings Account - Misr Bank (987654321)</option>
+                            <option value="456789123">Investment Account - Alexandria Bank (456789123)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="button">Create Transaction</button>
+                    <button type="button" class="button secondary" onclick="window.location.hash = '#transactions'">Cancel</button>
+                </div>
+            </form>
+        </div>
+      `,
+    };
+
+    let balanceChart = null;
+
+    const chartData = {
+      week: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        data: [11500, 11800, 11650, 11900, 12100, 12300, 12450]
+      },
+      month: {
+        labels: ['1-7', '8-14', '15-21', '22-28', '29-31'],
+        data: [11450, 11800, 12100, 12450, 12800]
+      },
+      year: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        data: [10000, 10200, 10500, 10800, 11200, 11500, 11800, 12100, 12450, 12800, 13100, 13400]
+      }
+    };
+
+    function initChart() {
+      if (balanceChart) {
+        balanceChart.destroy();
+        balanceChart = null;
+      }
+
+      const ctx = document.getElementById('balanceChart');
+      if (!ctx) return;
+
+      balanceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: chartData.week.labels,
+          datasets: [{
+            label: 'Account Balance',
+            data: chartData.week.data,
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#2563eb',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              padding: 12,
+              titleColor: '#fff',
+              titleFont: {
+                size: 14,
+                weight: 'bold'
+              },
+              bodyFont: {
+                size: 13
+              },
+              callbacks: {
+                label: function (context) {
+                  return `Balance: $${context.raw.toLocaleString()}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                color: '#64748b'
+              }
+            },
+            y: {
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              },
+              ticks: {
+                color: '#64748b',
+                callback: function (value) {
+                  return '$' + value.toLocaleString();
+                }
+              }
+            }
+          },
+          interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
+          }
+        }
+      });
+
+      // Period filters
+      document.querySelectorAll('.chart-filter').forEach(filter => {
+        filter.addEventListener('click', function () {
+          const period = this.dataset.period;
+          document.querySelectorAll('.chart-filter').forEach(f => f.classList.remove('active'));
+          this.classList.add('active');
+          balanceChart.data.labels = chartData[period].labels;
+          balanceChart.data.datasets[0].data = chartData[period].data;
+          balanceChart.update();
+        });
+      });
+    }
+
+    function loadContent() {
+      const content = routes[window.location.hash] || `
+        <div class="login-container">
+            <h2>Welcome to Hessaby</h2>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button class="button" style="width: 100%" onclick="window.location.hash = '#dashboard'">Login</button>
+        </div>
+      `;
+      document.getElementById('app').innerHTML = content;
+
+      // Update active navigation link
+      document.querySelectorAll('.navbar a').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === window.location.hash);
+      });
+
+      bindForms();
+
+      if (window.location.hash === '#dashboard') {
+        initChart();
+      }
+    }
+
+    // Add loading animation
+    const loading = document.querySelector('.loading');
+    window.addEventListener('load', () => {
+      loading.classList.add('hidden');
+    });
+
+    // Theme handling
+    function setTheme(t) {
+      document.body.setAttribute('data-theme', t);
+      const themeIcon = document.querySelector('.theme-toggle i');
+      if (themeIcon) {
+        themeIcon.classList.remove('fa-moon', 'fa-sun');
+        themeIcon.classList.add(t === 'dark' ? 'fa-sun' : 'fa-moon');
+      }
+    }
+
+    function toggleTheme() {
+      const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+      try {
+        localStorage.setItem('theme', newTheme);
+      } catch (e) { }
+    }
+
+    // Load saved theme
+    try {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) setTheme(savedTheme);
+    } catch (e) { }
+
+    window.addEventListener('hashchange', () => {
+      loading.classList.remove('hidden');
+      setTimeout(() => {
+        loadContent();
+        loading.classList.add('hidden');
+      }, 300);
+    });
+
+    window.addEventListener('load', loadContent);
+  </script>
+  <script>
+    // Add this script for handling account updates
+    function loadAccountDetails(accountNumber) {
+      // This is a mock function to simulate loading account details
+      // In a real application, this would fetch data from a server
+      const accountDetails = {
+        '123456789': {
+          bank: 'national',
+          accountType: 'checking',
+          currency: 'EGP',
+          cardType: 'debit',
+          status: 'active'
+        },
+        '987654321': {
+          bank: 'misr',
+          accountType: 'savings',
+          currency: 'USD',
+          cardType: 'credit',
+          status: 'active'
+        },
+        '456789123': {
+          bank: 'alexandria',
+          accountType: 'investment',
+          currency: 'EUR',
+          cardType: 'debit',
+          status: 'active'
+        }
+      };
+
+      if (accountDetails[accountNumber]) {
+        const details = accountDetails[accountNumber];
+        document.getElementById('updateBank').value = details.bank;
+        document.getElementById('updateAccountType').value = details.accountType;
+        document.getElementById('updateCurrency').value = details.currency;
+        document.getElementById('updateCardType').value = details.cardType;
+        document.getElementById('updateStatus').value = details.status;
+      }
+    }
+
+    // Bind handlers for forms injected by loadContent()
+    function bindForms() {
+      const handlers = {
+        createAccountForm: ['Account creation submitted!', '#accounts'],
+        updateAccountForm: ['Account update submitted!', '#accounts'],
+        newTransactionForm: ['Transaction created successfully!', '#transactions'],
+        subscriptionForm: ['Subscriptions updated successfully!', '#subscriptions']
+      };
+
+      Object.keys(handlers).forEach(id => {
+        const form = document.getElementById(id);
+        if (!form) return;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          alert(handlers[id][0]);
+          window.location.hash = handlers[id][1];
+        });
+      });
+
+      // New transaction: transfer fields toggle and default date
+      const transactionType = document.getElementById('transactionType');
+      const transferFields = document.getElementById('transferFields');
+      if (transactionType && transferFields) {
+        transactionType.addEventListener('change', function () {
+          const isTransfer = this.value === 'transfer';
+          transferFields.style.display = isTransfer ? 'block' : 'none';
+          document.getElementById('transferToAccount').required = isTransfer;
+        });
+        document.getElementById('transactionDate').value = new Date().toISOString().split('T')[0];
+      }
+    }
+  </script>
+</body>
+
+</html>
+
